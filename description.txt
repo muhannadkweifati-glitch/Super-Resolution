@@ -1,0 +1,61 @@
+Project Overview: Fundus Image Super-Resolution with EDSR
+
+This project implements a Super-Resolution pipeline for retinal fundus images, aiming to enhance image quality and preserve fine structural details crucial for medical analysis.
+
+We experimented with Enhanced Deep Super-Resolution (EDSR)–style networks, including a lightweight variant (EDSR-Lite / EDSR-Bilinear) that balances performance and efficiency.
+
+Dataset
+
+High-Resolution (HR) Images: Retinal fundus scans used as ground truth.
+
+Masks (Ground Truth Masks): Binary masks corresponding to the HR images, ensuring that training emphasizes medically relevant regions.
+
+Model Architecture
+
+Base Network: EDSR-Lite with residual blocks (skip connections for stable training).
+
+Up sampling Layer: Pixel Shuffle for efficient resolution scaling.
+
+Loss Functions (multi-component to balance sharpness, structure, and perceptual quality):
+
+L1 Loss (masked) → pixel-wise reconstruction.
+
+Perceptual Loss (VGG19) → ensures realistic textures.
+
+SSIM Loss → preserves structural similarity and avoids artifacts.
+
+Total Variation (TV) Loss → reduces checkerboard artifacts and enforces smoothness.
+
+Training
+
+Optimizer: AdamW with learning rate scheduling (Cosine Annealing).
+
+Mixed precision training (AMP) for faster computation.
+
+Early stopping to prevent overfitting.
+
+Results
+
+The network successfully improves resolution and clarity while minimizing artifacts such as checkerboard patterns.
+
+Evaluation metrics include PSNR and SSIM, both improving steadily during training.
+
+Inference outputs show sharper vessel structures and enhanced color representation compared to bicubic upscaling.
+
+Inference
+
+The trained model can be applied to new fundus images. The pipeline:
+
+Load the low-resolution (LR) input image.
+
+Perform super-resolution with the trained EDSR-based model.
+
+Compare outputs against bicubic upscaling.
+
+Display/save both the input and the super-resolved result with their respective dimensions.
+
+Applications
+
+Medical imaging (ophthalmology, retinal disease detection).
+
+General image enhancement tasks where detail preservation is crucial.
